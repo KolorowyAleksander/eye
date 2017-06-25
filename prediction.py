@@ -4,12 +4,13 @@ Predicts a mask from image given a model
 '''
 from sys import argv
 from datetime import datetime
+from argparse import ArgumentParser
 
 import numpy as np
 from cv2 import imread, imwrite
 from keras.models import model_from_json
 
-from utils import add_black_border
+from utils import add_black_border, existing_file
 
 S_LEN = 21
 
@@ -45,12 +46,11 @@ def predict(image):
 
 
 def main(args):
-    if args[1] is None:
-        print("No image given")
-        exit()
+    parser = ArgumentParser()
+    parser.add_argument('image', help='predicted image', type=existing_file)
 
-    filename = args[1]
-    image = imread(filename)
+    args = parser.parse_args()
+    image = imread(args.image)
     result = predict(image)
 
     imwrite('bin/result' + datetime.now().isoformat('T') + '.png', result)
