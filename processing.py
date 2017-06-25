@@ -31,13 +31,12 @@ def process_image(image):
                               THRESH_BINARY,
                               17,
                               2)
-    return image
+    return 255-image  # inverse the image to be white on black
 
 
 def main():
     parser = ArgumentParser()
     parser.add_argument('image', help='original image', type=existing_file)
-    parser.add_argument('mask', help='original mask', type=existing_file)
     args = parser.parse_args()
 
     image = imread(args.image)
