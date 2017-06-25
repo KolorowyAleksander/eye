@@ -41,10 +41,11 @@ def main():
     args = parser.parse_args()
 
     mask = imread(args.mask)
-    test = imread(args.tested)
+    test = imread(args.test)
 
+    img = None
     if args.image is not None:
-        img = imread(args.draw)
+        img = imread(args.image)
 
     if mask.shape != test.shape or img is not None and img.shape != mask.shape:
         exit('Images dimensions differ {}/{}'.format(mask.shape, test.shape)
