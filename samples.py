@@ -44,7 +44,6 @@ def main():
             sample = image[x-R2:x+R2+1, y-R2:y+R2+1]
             l = label[x, y]//255
 
-            print(FMT.format(dest, counter, l))
             imwrite(FMT.format(dest, counter, l), sample)
 
             counter += 1
