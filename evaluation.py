@@ -36,16 +36,14 @@ def main():
     parser = ArgumentParser()
     parser.add_argument('mask', help='original mask', type=existing_file)
     parser.add_argument('test', help='measured mask', type=existing_file)
-    parser.add_argument('--draw', dest='image', help='draw comparison',
-                        type=existing_file)
+    parser.add_argument('--draw', help='draw comparison', type=existing_file)
     args = parser.parse_args()
 
     mask = imread(args.mask)
     test = imread(args.test)
 
-    img = None
-    if args.image is not None:
-        img = imread(args.image)
+    if args.draw is not None:
+        img = imread(args.draw)
 
     if mask.shape != test.shape or img is not None and img.shape != mask.shape:
         exit('Images dimensions differ {}/{}'.format(mask.shape, test.shape)
