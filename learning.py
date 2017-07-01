@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 from os import sep, listdir
-from sys import argv
+from argparse import ArgumentParser
+from datetime import datetime
 
 import numpy as np
 import cv2 as cv
 
 from model import model
+from utils import existing_directory
 
 batch_size = 128
 epochs = 10
@@ -13,9 +15,16 @@ epochs = 10
 model = model()
 
 
-def main(args):
+def main():
+    parser = ArgumentParser()
+    parser.add_argument('sources', help='sources', type=existing_directory)
+    parser.add_argument('--model',
+                        help='model name',
+                        default='model' + datetime.now().isoformat('T'))
+    args = parser.parse_args()
+
     k = 2
-    images, labels = load_images_and_labels(args[1])
+    images, labels = load_images_and_labels(args.sources)
 
     train_data = images[len(images)//k:]
     train_labels = labels[len(images)//k:]
@@ -31,10 +40,10 @@ def main(args):
               shuffle=True,
               validation_data=(test_data, test_labels))
 
-    with open('bin/model.json', 'w+') as file:
+    with open('bin/{}.json'.format(args.model), 'w+') as file:
         file.write(model.to_json())
 
-    model.save_weights('bin/model.h5')
+    model.save_weights('bin/{}.h5'.format(args.model))
 
 
 def load_images_and_labels(directory):
@@ -56,4 +65,4 @@ def load_images_and_labels(directory):
 
 
 if __name__ == '__main__':
-    main(argv)
+    main()
