@@ -15,15 +15,15 @@ from utils import add_black_border, existing_file
 S_LEN = 21
 
 
-def load_model():
-    with open('bin/model.json', 'r') as file:
+def load_model(model_name):
+    with open('bin/{}.json'.format(model_name), 'r') as file:
         model = model_from_json(file.read())
-        model.load_weights('bin/model.h5')
+        model.load_weights('bin/{}.h5'.format(model_name))
     return model
 
 
-def predict(image):
-    model = load_model()
+def predict(image, model_name):
+    model = load_model(model_name)
 
     original_height = len(image)
     original_width = len(image[0])
@@ -48,10 +48,11 @@ def predict(image):
 def main(args):
     parser = ArgumentParser()
     parser.add_argument('image', help='predicted image', type=existing_file)
+    parser.add_argument('model', help='model name')
 
     args = parser.parse_args()
     image = imread(args.image)
-    result = predict(image)
+    result = predict(image, args.model)
 
     imwrite('bin/result' + datetime.now().isoformat('T') + '.png', result)
 
