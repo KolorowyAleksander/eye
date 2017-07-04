@@ -4,6 +4,7 @@ Evaluates two masks, optionally showing them on a result
 '''
 from datetime import datetime
 from argparse import ArgumentParser
+from math import sqrt
 
 from cv2 import imread, imwrite, add
 from numpy import array_equal, hstack, vstack
@@ -27,7 +28,9 @@ def compare_images(original, tested):
 
     measures = {'acc': (matrix['tp'] + matrix['tn'])/sum(matrix.values()),
                 'prec': matrix['tp']/(matrix['tp'] + matrix['fp']),
-                'sen': matrix['tp']/(matrix['tp'] + matrix['fn'])}
+                'sen': matrix['tp']/(matrix['tp'] + matrix['fn']),
+                'spec': matrix['tn']/(matrix['tn'] + matrix['fp'])}
+    measures['g-mean'] = sqrt(measures['sen'] * measures['prec'])
 
     return measures, matrix
 
